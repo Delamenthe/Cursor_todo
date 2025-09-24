@@ -6,6 +6,11 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-best_todo}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -14,7 +19,8 @@ services:
   backend:
     build: .
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DJANGO_SETTINGS_MODULE: best_todo.settings
       POSTGRES_DB: ${POSTGRES_DB:-best_todo}
@@ -45,8 +51,8 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - ./frontend:/app:delegated
+    command: sh -c "npm ci --legacy-peer-deps && npm start"
     ports:
       - "3000:3000"
 
