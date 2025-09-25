@@ -7,6 +7,7 @@ class TaskList(models.Model):
     # Either a default background key (like a gradient name) or a custom image
     default_background_key = models.CharField(max_length=64, blank=True, default="")
     custom_background = models.ImageField(upload_to="list_backgrounds/", blank=True, null=True)
+    pinned = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -29,3 +30,15 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
+
+class BackgroundAsset(models.Model):
+    name = models.CharField(max_length=200, blank=True, default="")
+    file = models.ImageField(upload_to="background_assets/")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.name or self.file.name
+
+# Optional relation from TaskList to a reusable background asset
+TaskList.add_to_class('background_asset', models.ForeignKey(BackgroundAsset, blank=True, null=True, on_delete=models.SET_NULL))

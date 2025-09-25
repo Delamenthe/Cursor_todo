@@ -1,0 +1,20 @@
+# Python
+venv
+**/__pycache__
+**/*.pyc
+
+# Django media/static runtime
+media
+staticfiles
+
+# Node
+frontend/node_modules
+frontend/build
+
+# Git/IDE/Env
+.git
+.env
+.env.*
+.idea
+.vscode
+*.log

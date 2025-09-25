@@ -18,13 +18,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from tasks.views import TaskListViewSet, TaskViewSet
+from tasks.views import TaskListViewSet, TaskViewSet, BackgroundAssetViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 
 router = routers.DefaultRouter()
 router.register(r"lists", TaskListViewSet)
 router.register(r"tasks", TaskViewSet)
+router.register(r"backgrounds", BackgroundAssetViewSet)
 
 
 urlpatterns = [
